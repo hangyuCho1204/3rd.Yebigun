@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="product.mapper.ProductMapper">
+
+	<resultMap type="product.fileUtil.ProductFileModel" id="ProductResult">
+		<id property="productId" column="product_id" />
+		<result property="productName" column="product_name"/>
+		<result property="categoryId" column="category_id"/>
+		<result property="price" column="price"/>
+		<result property="stock" column="stock"/>
+		<result property="prosize" column="prosize"/>
+		<result property="prodate" column="prodate"/>
+		<result property="buyYn" column="buy_yn"/>
+		<result property="explain" column="explain"/>
+		<result property="count" column="count"/>
+		<association property="imgName" column="product_id" select="getImgById" />
+	</resultMap> 
+	<resultMap type="product.fileUtil.EntityProductImage" id="ImgResult">
+		<id property="imgId" column="img_id" />
+		<result property="productId" column="product_id"/>
+		<result property="imgName" column="imgname"/>
+		<result property="imgPath" column="imgpath"/>
+	</resultMap> 
+	
+	<select id="getList" resultMap="ProductResult">
+		select * from product order by product_id
+	</select>
+	
+	<select id="getImgById" parameterType="string" resultMap="ImgResult">
+		select * from product_image where product_id = #{productId}
+	</select>
+	
+	<select id="getToyList" resultMap="ProductResult">
+		select *from product where category_id like '%'||'토이'||'%' order by category_id
+	</select>
+	
+	<select id="getDesignList" resultMap="ProductResult">
+		select *from product where category_id like '%'||'디자인문구'||'%' order by category_id
+	</select>
+	
+	<select id="getInteriorList" resultMap="ProductResult">
+		select *from product where category_id like '%'||'홈인테리어'||'%' order by category_id
+	</select>
+</mapper>

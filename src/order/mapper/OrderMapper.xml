@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="order.mapper.OrderMapper">
+
+	
+
+	<resultMap type="order.dto.OrderModel" id="OrderResult">
+		<id property="orderNumber" column="order_number" />
+		<result property="orderDate" column="orderdate"/>
+		<result property="email" column="email"/>
+		<association property="oiList" column="order_number" select="getOiByOrderNum" />
+	</resultMap>
+	
+	<resultMap type="order.dto.OrderDto" id="OrderResult2">
+		<id property="orderNumber" column="order_number" />
+		<result property="orderDate" column="orderdate"/>
+		<result property="email" column="email"/>
+	</resultMap>
+	
+	<resultMap type="order.dto.OrderItemDto" id="OiResult">
+		<id property="orderItemId" column="order_item_id" />
+		<result property="productId" column="product_id"/>
+		<result property="orderStock" column="order_stock"/>
+		<result property="request" column="request"/>
+		<result property="orderPrice" column="order_price"/>
+		<result property="deliveryPrice" column="delivery_price"/>
+		<result property="procState" column="proc_state"/>
+		<result property="orderNumber" column="order_number"/>
+	</resultMap> 
+	
+	<select id="getList" resultType="order.dto.OrderModel">
+		select * from product_order order by order_number
+	</select>
+	
+	<select id="getOiByOrderNum" parameterType="int" resultMap="OiResult">
+		select * from product_order_item where order_number = #{orderNumber}
+	</select>
+	
+	<select id="getOrderModel" parameterType="int" resultMap="OrderResult">
+		<!-- SELECT MAX(order_number) AS order_number, MAX(orderdate) KEEP(DENSE_RANK FIRST ORDER BY order_number DESC) AS orderdate, MAX(email) KEEP(DENSE_RANK FIRST ORDER BY order_number DESC) AS email FROM product_order where order_number = #{email} order by order_number -->
+		select * from product_order where order_Number= #{id}
+	</select>
+	<!-- <select id="getOrList" parameterType="String" resultMap="OrderResult2">
+		select * from product_order where email= #{email}
+	</select> -->
+	
+	<select id="getOrList" parameterType="int" resultMap="OrderResult2">
+		select * from product_order where email= #{email}
+	</select>
+</mapper>
+
+
+
+
